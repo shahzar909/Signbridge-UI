@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# SignBridge
 
-## Getting Started
+SignBridge — Accessible live video calls with real-time translation
 
-First, run the development server:
+SignBridge is a Next.js-based user interface for an accessible video calling platform focused on improving real-time communication for people with disabilities. It provides a foundation for building low-latency video experiences with live translation and accessibility-first UI components.
+
+## Key Features
+
+- Accessible UI components (inputs, buttons, avatars, checkboxes)
+- Real-time translation support (integration-ready for live video feeds)
+- Clean, component-driven Next.js app structure
+- Easy local development and production builds
+
+## Tech Stack
+
+- Next.js
+- React
+- PostCSS
+- Plain JS modules for small utilities
+
+## Quick Start
+
+### Prerequisites
+
+- Node.js 18 or newer
+- npm, yarn, or pnpm
+
+### Install
+
+Install dependencies from the project root:
+
+```bash
+npm install
+```
+
+### Run (development)
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This runs the Next.js development server. Open http://localhost:3000 to view the app.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### Build (production)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm run start
+```
 
-## Learn More
+## Environment
 
-To learn more about Next.js, take a look at the following resources:
+This UI is primarily static and doesn’t require secrets to run locally. If you integrate with backend services (video, translation, auth), provide those service URLs and keys in a `.env.local` file at the project root. Example:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+# .env.local
+NEXT_PUBLIC_API_BASE_URL=https://api.example.com
+VIDEO_SERVICE_KEY=your_key_here
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project Structure
 
-## Deploy on Vercel
+- `src/app/` — Next.js app routes and pages
+- `src/components/` — Reusable UI components
+- `src/lib/` — Small utility modules
+- `public/` — Static assets (images, icons)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Contributing
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Contributions are welcome. Typical workflow:
+
+1. Fork the repository and create a feature branch
+2. Make changes and run the dev server to test
+3. Open a pull request with a clear description and screenshots if UI changed
+
+Please keep changes focused and add tests or notes where helpful.
+
+## License
+
+This project includes a `LICENSE` file in the repository root.
+
+## Acknowledgements & Contact
+
+Built to improve accessibility and inclusiveness in real-time communication. For questions or collaboration, open an issue or contact the maintainers via the repository.
