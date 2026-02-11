@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 
 const FeaturesGrid = () => {
     return (
-        <section className={"py-24 px-6 md:px-20 space-y-20"}>
+        <section className={"py-24 bg-card px-6 md:px-20 space-y-20"}>
             {/* Header Section*/}
             <div className={"w-full flex flex-col items-center justify-center gap-2"}>
                 <h2 className={"font-bold text-5xl mb-2"}>Build for Everyone</h2>
@@ -17,7 +17,7 @@ const FeaturesGrid = () => {
                 {/* First Row */}
                 <div className={"w-full flex items-center justify-center gap-5"}>
                     {/*Left-card*/}
-                    <div className={"border shadow-md rounded-lg p-6 pl-10 w-[80%] flex flex-col items-start justify-center gap-10"}>
+                    <div className={"border bg-white shadow-md rounded-lg p-6 pl-10 w-[80%] flex flex-col items-start justify-center gap-10"}>
                         <div>
                             <Ear size={60} color="green" />
                         </div>
@@ -32,14 +32,17 @@ const FeaturesGrid = () => {
                         </div>
                     </div>
                     {/*Right-card*/}
-                    <div className="p-6 pl-10 shadow-md min-h-[53vh] rounded-lg border bg-chart-2 text-white flex flex-col items-start justify-center gap-10">
+                    <div className="p-6 pl-10 shadow-md min-h-full rounded-lg border bg-chart-2 text-white flex flex-col items-start justify-center gap-10">
                         <div>
                             <ClosedCaption size={60} />
                         </div>
                         <div className="w-full space-y-5">
                             <h3 className="font-semibold text-2xl">Live Captioning</h3>
-                            <p className="w-[70%] text-left">Instant, accurate transcription of spoken words into text with custom font sizes and
+                            <p className="w-[75%] text-left">Instant, accurate transcription of spoken words into text with custom font sizes and
                                 colors.</p>
+                        </div>
+                        <div className={"flex items-center justify-center gap-3"}>
+                            <Badge className={"bg-chart-4 p-2 px-4 font-semibold"} variant="default">Real-Time Translation</Badge>
                         </div>
                     </div>
                 </div>
@@ -57,7 +60,7 @@ const FeaturesGrid = () => {
                     </div>
 
                     {/* Right-card */}
-                    <div className="p-6 pl-10 py-9 border shadow-md rounded-lg p-6 pl-10 w-[80%] flex flex-col items-start justify-center gap-10">
+                    <div className="p-6 bg-white pl-10 py-9 border shadow-md rounded-lg p-6 pl-10 w-[80%] flex flex-col items-start justify-center gap-10">
                         <div>
                             <ShieldCheck size={60} color="green"/>
                         </div>
