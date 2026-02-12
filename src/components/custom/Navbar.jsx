@@ -1,8 +1,20 @@
 "use client";
-import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
-import {Button} from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useState } from "react";
+
+import { Bell, Menu, X, User } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import useUserStore from "@/store/userStore";
+import { logoutUser } from "@/actions/auth";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -12,19 +24,27 @@ const navItems = [
 ];
 
 export default function Navbar() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const user = useUserStore((state) => state.user);
+  const logout = useUserStore((state) => state.logout);
+
+  const handleLogout = async () => {
+    await logoutUser();
+    logout();
+  };
+
   return (
-    <nav className="w-full border-b bg-white">
+    <nav className="w-full border-b bg-white fixed top-0 z-50">
       <div className="mx-auto h-16 max-w-7xl px-6">
-        <div className="relative flex h-full items-center">
+        <div className="relative flex h-full items-center justify-between">
           {/* Left - Brand */}
           <div className="flex items-center gap-3">
             <img src="/logo.svg" alt="Logo" className="h-8 w-8" />
             <Link href={"/"} className="text-lg font-semibold text-gray-900 cursor-pointer">Signbridge</Link>
           </div>
 
-          {/* Center - Navigation Links */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          {/* Center - Navigation Links (Desktop) */}
+          <div className="hidden md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:block">
             <div className="flex items-center gap-8">
               {navItems.map((item) => (
                 <Link
@@ -38,23 +58,102 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Right - Login & Avatar */}
-          <div className="ml-auto flex items-center gap-3">
-            <Button variant="cBridge" size="sm" className={"font-semibold"} onClick={() => setIsLoggedIn(!isLoggedIn)}>
-              {isLoggedIn ? "Logout" : "Login"}
+          {/* Right - Actions */}
+          <div className="hidden md:flex items-center gap-4">
+            {user ? (
+              <>
+                <Button variant="ghost" size="icon" className="text-gray-500 hover:text-gray-900">
+                  <Bell className="h-5 w-5" />
+                </Button>
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                      <div className="flex h-full w-full items-center justify-center rounded-full bg-primary/10 text-primary font-bold">
+                        {user.username ? user.username[0].toUpperCase() : <User className="h-4 w-4" />}
+                      </div>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56" align="end" forceMount>
+                    <DropdownMenuLabel className="font-normal">
+                      <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium leading-none">{user.username}</p>
+                        <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <Link href="/dashboard/settings">
+                      <DropdownMenuItem>Settings</DropdownMenuItem>
+                    </Link>
+                    <DropdownMenuItem>Support</DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className="text-red-600" onClick={handleLogout}>
+                      Log out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
+            ) : (
+              <div className="flex items-center gap-4">
+                <Link href="/login">
+                  <Button variant="ghost" className="font-semibold text-gray-600 hover:text-gray-900">
+                    Log in
+                  </Button>
+                </Link>
+                <Link href="/register">
+                  <Button className="font-semibold rounded-full px-6">Sign up</Button>
+                </Link>
+              </div>
+            )}
+          </div>
+          {/* Mobile Menu Button */}
+          <div className="md:hidden flex items-center gap-2">
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <div className="flex h-full w-full items-center justify-center rounded-full bg-primary/10 text-primary font-bold">
+                      {user.username ? user.username[0].toUpperCase() : <User className="h-4 w-4" />}
+                    </div>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">{user.username}</p>
+                      <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <Link href="/dashboard/settings">
+                    <DropdownMenuItem>Settings</DropdownMenuItem>
+                  </Link>
+                  <DropdownMenuItem>Support</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className="text-red-600" onClick={handleLogout}>
+                    Log out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Link href="/login">
+                <Button variant="ghost" className="font-semibold text-gray-600 hover:text-gray-900">
+                  Log in
+                </Button>
+              </Link>
+            )}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-gray-500 hover:text-gray-900"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
-            {isLoggedIn && 
-            <Avatar className="h-9 w-9 cursor-pointer">
-              <AvatarImage
-                src="https://github.com/shadcn.png"
-                alt="User avatar"
-              />
-              <AvatarFallback>U</AvatarFallback>
-            </Avatar>
-            }
+
           </div>
         </div>
       </div>
-    </nav>
+    </nav >
   );
 }

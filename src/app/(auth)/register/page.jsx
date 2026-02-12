@@ -1,16 +1,19 @@
+
 "use client";
 
+import { useActionState, useState } from "react";
+import { registerUser } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function RegisterPage() {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted");
-  };
+  const [state, formAction, isPending] = useActionState(registerUser, null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
@@ -24,7 +27,13 @@ export default function RegisterPage() {
           </p>
         </div>
 
-        <form className="space-y-6" onSubmit={handleSubmit}>
+        <form className="space-y-6" action={formAction}>
+          {state?.error && (
+            <div className="p-3 bg-red-50 border border-red-200 rounded-md text-red-600 text-sm">
+              {state.error}
+            </div>
+          )}
+
           <div className="space-y-2">
             <Label
               htmlFor="fullname"
@@ -34,8 +43,8 @@ export default function RegisterPage() {
             </Label>
             <Input
               id="fullname"
+              name="fullname"
               type="text"
-              placeholder="John Doe"
               className="h-12 bg-white border-gray-200 rounded-lg px-4 text-base"
               required
             />
@@ -50,8 +59,8 @@ export default function RegisterPage() {
             </Label>
             <Input
               id="email"
+              name="email"
               type="email"
-              placeholder="name@company.com"
               className="h-12 bg-white border-gray-200 rounded-lg px-4 text-base"
               required
             />
@@ -64,13 +73,22 @@ export default function RegisterPage() {
             >
               Password
             </Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              className="h-12 bg-white border-gray-200 rounded-lg px-4 text-base"
-              required
-            />
+            <div className="relative">
+              <Input
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                className="h-12 bg-white border-gray-200 rounded-lg px-4 pr-12 text-base"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -80,13 +98,22 @@ export default function RegisterPage() {
             >
               Confirm Password
             </Label>
-            <Input
-              id="confirmPassword"
-              type="password"
-              placeholder="••••••••"
-              className="h-12 bg-white border-gray-200 rounded-lg px-4 text-base"
-              required
-            />
+            <div className="relative">
+              <Input
+                id="confirmPassword"
+                name="confirmPassword"
+                type={showConfirmPassword ? "text" : "password"}
+                className="h-12 bg-white border-gray-200 rounded-lg px-4 pr-12 text-base"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              >
+                {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
           </div>
 
           <div className="flex items-start gap-3 py-1">
@@ -108,9 +135,10 @@ export default function RegisterPage() {
 
           <Button
             type="submit"
-            className="w-full h-12 bg-gray-900 text-white text-sm font-bold uppercase tracking-widest rounded-lg hover:bg-black transition-colors"
+            disabled={isPending}
+            className="w-full h-12 bg-gray-900 text-white text-sm font-bold uppercase tracking-widest rounded-lg hover:bg-black transition-colors disabled:opacity-70"
           >
-            Create Account
+            {isPending ? "Creating Account..." : "Create Account"}
           </Button>
 
           <div className="pt-8 mt-4 border-t border-gray-200 text-center">

@@ -1,20 +1,24 @@
 "use client";
 
-import {Bell, Calendar, Hand, Keyboard, Mic, Search, Signal, Video} from "lucide-react";
-import {Button} from "@/components/ui/button";
+import { Bell, Calendar, Hand, Keyboard, Mic, Search, Signal, Video } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-import {activities, systemChecks, userData} from "@/data/dashboardData";
-import {ActivityItem, QuickActionCard, SystemCheckItem} from "@/components/custom/dashboard";
+import { activities, systemChecks, userData } from "@/data/dashboardData";
+import { ActivityItem, QuickActionCard, SystemCheckItem } from "@/components/custom/dashboard";
+
+import Link from "next/link";
+import useUserStore from "@/store/userStore";
 
 export default function DashboardPage() {
-    const { name, stats } = userData;
+    const user = useUserStore((state) => state.user);
+    const { stats } = userData; // Keeping stats from mock data for now
 
     return (
         <div className="space-y-8">
             {/* Header */}
             <div className="flex justify-between items-end">
                 <div>
-                    <h1 className="text-2xl font-bold text-slate-900 mb-1">Welcome back, {name.split(' ')[0]}</h1>
+                    <h1 className="text-2xl font-bold text-slate-900 mb-1">Welcome back, {user?.username?.split(' ')[0] || 'User'}</h1>
                     <p className="text-sm text-slate-500 font-medium">You have {stats.scheduledCalls} scheduled calls today.</p>
                 </div>
                 <div className="flex gap-3">

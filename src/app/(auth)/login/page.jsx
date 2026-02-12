@@ -1,16 +1,18 @@
 "use client";
 
+import { useActionState } from "react";
+import { loginUser } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 export default function Page() {
-  const handleSubmit = () => {
-    e.preventDefault();
-    console.log("Form submitted");
-  };
+  const [state, formAction, isPending] = useActionState(loginUser, null);
+  const searchParams = useSearchParams();
+  const registered = searchParams.get("registered");
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
@@ -24,7 +26,19 @@ export default function Page() {
           </p>
         </div>
 
-        <form className="space-y-6" onSubmit={handleSubmit}>
+        {registered && (
+          <div className="mb-6 p-4 bg-green-50 text-green-700 rounded-md text-sm">
+            Registration successful! Please log in.
+          </div>
+        )}
+
+        <form className="space-y-6" action={formAction}>
+          {state?.error && (
+            <div className="p-3 bg-red-50 border border-red-200 rounded-md text-red-600 text-sm">
+              {state.error}
+            </div>
+          )}
+
           <div className="space-y-2">
             <Label
               htmlFor="email"
@@ -34,6 +48,7 @@ export default function Page() {
             </Label>
             <Input
               id="email"
+              name="email"
               type="email"
               placeholder="name@company.com"
               className="h-12 bg-white border-gray-200 rounded-lg px-4 text-base"
@@ -58,6 +73,7 @@ export default function Page() {
             </div>
             <Input
               id="password"
+              name="password"
               type="password"
               placeholder="••••••••"
               className="h-12 bg-white border-gray-200 rounded-lg px-4 text-base"
@@ -77,9 +93,10 @@ export default function Page() {
 
           <Button
             type="submit"
-            className="w-full h-12 bg-gray-900 text-white text-sm font-bold uppercase tracking-widest rounded-lg hover:bg-black transition-colors"
+            disabled={isPending}
+            className="w-full h-12 bg-gray-900 text-white text-sm font-bold uppercase tracking-widest rounded-lg hover:bg-black transition-colors disabled:opacity-70"
           >
-            Sign In
+            {isPending ? "Signing In..." : "Sign In"}
           </Button>
 
           <div className="pt-8 mt-4 border-t border-gray-200 text-center">
