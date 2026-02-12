@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useState } from "react";
 
-import { Bell, Menu, X, User } from "lucide-react";
+import { Bell, Menu, X, User, Handshake } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,10 +38,10 @@ export default function Navbar() {
       <div className="mx-auto h-16 max-w-7xl px-6">
         <div className="relative flex h-full items-center justify-between">
           {/* Left - Brand */}
-          <div className="flex items-center gap-3">
-            <img src="/logo.svg" alt="Logo" className="h-8 w-8" />
-            <Link href={"/"} className="text-lg font-semibold text-gray-900 cursor-pointer">Signbridge</Link>
-          </div>
+          <Link href="/" className="flex items-center gap-3">
+            <Handshake className="h-6 w-6" />
+            <p className="text-lg font-semibold text-gray-900 cursor-pointer">Signbridge</p>
+          </Link>
 
           {/* Center - Navigation Links (Desktop) */}
           <div className="hidden md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:block">
